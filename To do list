@@ -1,0 +1,64 @@
+# todo_app.py
+
+class Task:
+    def __init__(self, title, description):
+        self.title = title
+        self.description = description
+        self.status = "To Do"
+
+    def __str__(self):
+        return f"{self.title} - {self.description} - {self.status}"
+
+class TodoList:
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, task):
+        self.tasks.append(task)
+
+    def update_task_status(self, task_index, new_status):
+        if 0 <= task_index < len(self.tasks):
+            self.tasks[task_index].status = new_status
+
+    def view_tasks(self):
+        for index, task in enumerate(self.tasks, start=1):
+            print(f"{index}. {task}")
+
+def get_user_input(prompt):
+    return input(prompt).strip()
+
+def display_menu(options):
+    for index, option in enumerate(options, start=1):
+        print(f"{index}. {option}")
+
+def get_choice(options):
+    display_menu(options)
+    choice = get_user_input("Choose an option: ")
+    return int(choice) if choice.isdigit() else 0
+
+def main():
+    todo_list = TodoList()
+
+    while True:
+        options = ["Add Task", "Update Task Status", "View Tasks", "Quit"]
+        choice = get_choice(options)
+
+        if choice == 1:
+            title = get_user_input("Enter task title: ")
+            description = get_user_input("Enter task description: ")
+            task = Task(title, description)
+            todo_list.add_task(task)
+        elif choice == 2:
+            todo_list.view_tasks()
+            task_index = get_choice(range(1, len(todo_list.tasks) + 1)) - 1
+            new_status = get_user_input("Enter new status: ")
+            todo_list.update_task_status(task_index, new_status)
+        elif choice == 3:
+            todo_list.view_tasks()
+        elif choice == 4:
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
